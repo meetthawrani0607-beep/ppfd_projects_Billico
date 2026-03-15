@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - Billico{% endblock %}
+
+{% block page_title %}Application Settings{% endblock %}
+
+{% block content %}
+<div class="settings-page">
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <!-- General Settings -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-sliders me-2"></i>General Settings
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <h6>Theme Preference</h6>
+                            <p class="text-muted mb-0">Choose your preferred color scheme</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-outline-primary" data-theme-toggle="light">
+                                    <i class="bi bi-sun me-1"></i>Light
+                                </button>
+                                <button type="button" class="btn btn-outline-primary" data-theme-toggle="dark">
+                                    <i class="bi bi-moon-stars me-1"></i>Dark
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <h6>Language</h6>
+                            <p class="text-muted mb-0">Set your preferred language</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <select class="form-select">
+                                <option selected>English (US)</option>
+                                <option disabled>Hindi (Coming Soon)</option>
+                                <option disabled>Spanish (Coming Soon)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h6>Currency</h6>
+                            <p class="text-muted mb-0">Set your preferred currency format</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <select class="form-select">
+                                <option selected>₹ INR (Indian Rupee)</option>
+                                <option>$ USD (US Dollar)</option>
+                                <option>€ EUR (Euro)</option>
+                                <option>£ GBP (British Pound)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Settings -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-bell me-2"></i>Notification Preferences
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <h6>Low Stock Alerts</h6>
+                            <p class="text-muted mb-0">Get notified when items are running low</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="lowStockAlerts" checked>
+                                <label class="form-check-label" for="lowStockAlerts"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <h6>Email Notifications</h6>
+                            <p class="text-muted mb-0">Receive email updates about your inventory</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
+                                <label class="form-check-label" for="emailNotifications"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h6>Weekly Reports</h6>
+                            <p class="text-muted mb-0">Get weekly summaries of your inventory</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="weeklyReports">
+                                <label class="form-check-label" for="weeklyReports"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inventory Settings -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-box-seam me-2"></i>Inventory Settings
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <h6>Default Reorder Level</h6>
+                            <p class="text-muted mb-0">Set the default reorder threshold for new items</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <input type="number" class="form-control" value="10" min="1">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <h6>Auto-Calculate Totals</h6>
+                            <p class="text-muted mb-0">Automatically calculate total values</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="autoCalculate" checked disabled>
+                                <label class="form-check-label" for="autoCalculate"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h6>Items Per Page</h6>
+                            <p class="text-muted mb-0">Number of items to display per page</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <select class="form-select">
+                                <option>10</option>
+                                <option>25</option>
+                                <option selected>50</option>
+                                <option>100</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data & Privacy -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-shield-check me-2"></i>Data & Privacy
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <h6>Export Data</h6>
+                            <p class="text-muted mb-0">Download all your inventory data</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <button class="btn btn-outline-primary">
+                                <i class="bi bi-download me-2"></i>Export CSV
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <h6>Clear Cache</h6>
+                            <p class="text-muted mb-0">Clear all cached data and sessions</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <button class="btn btn-outline-secondary">
+                                <i class="bi bi-trash me-2"></i>Clear Cache
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h6>Data Retention</h6>
+                            <p class="text-muted mb-0">How long to keep deleted items in archive</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <select class="form-select">
+                                <option>7 days</option>
+                                <option selected>30 days</option>
+                                <option>90 days</option>
+                                <option>Forever</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Save Button -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="alert alert-info mb-3">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Demo Mode:</strong> Settings are for demonstration purposes only and won't be saved.
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('dashboard.index') }}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                        </a>
+                        <button class="btn btn-primary" disabled>
+                            <i class="bi bi-check-circle me-2"></i>Save Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

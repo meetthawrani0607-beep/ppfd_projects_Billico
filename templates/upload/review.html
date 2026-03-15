@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Review Extracted Data - Billico{% endblock %}
+
+{% block page_title %}Review Extracted Data{% endblock %}
+
+{% block content %}
+<div class="review-page">
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="card-title">Bill Information</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Bill Number:</strong><br>
+                    {{ extracted_data.bill_number or 'N/A' }}
+                </div>
+                <div class="col-md-3">
+                    <strong>Bill Date:</strong><br>
+                    {{ extracted_data.bill_date|date if extracted_data.bill_date else 'N/A' }}
+                </div>
+                <div class="col-md-3">
+                    <strong>Supplier:</strong><br>
+                    {{ extracted_data.supplier_name or 'N/A' }}
+                </div>
+                <div class="col-md-3">
+                    <strong>Total Amount:</strong><br>
+                    {{ extracted_data.total_amount|currency if extracted_data.total_amount else 'N/A' }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form method="POST" action="{{ url_for('upload.confirm', upload_id=upload_log.id) }}">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Extracted Items ({{ extracted_data.items|length }})</h5>
+                <p class="text-muted mb-0">Review and select items to add to inventory</p>
+            </div>
+            <div class="card-body">
+                {% if extracted_data.items %}
+                <!-- Global Actions -->
+                <div class="row g-3 mb-4 p-3 bg-light rounded">
+                    <div class="col-md-4">
+                        <label class="form-label">Apply Category to All</label>
+                        <select class="form-control" id="globalCategory">
+                            <option value="">Choose...</option>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Apply Supplier to All</label>
+                        <select class="form-control" id="globalSupplier">
+                            <option value="">Choose...</option>
+                            {% for supplier in suppliers %}
+                            <option value="{{ supplier.id }}">{{ supplier.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">&nbsp;</label><br>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="selectAll">
+                            <label class="form-check-label" for="selectAll">Select All Items</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Items Table -->
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th width="50">
+                                    <input type="checkbox" id="selectAllCheckbox">
+                                </th>
+                                <th>Item Name</th>
+                                <th width="100">Quantity</th>
+                                <th width="120">Unit Price</th>
+                                <th width="200">Category</th>
+                                <th width="200">Supplier</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in extracted_data.items %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="items" value="{{ loop.index0 }}" class="item-checkbox"
+                                        checked>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm"
+                                        name="item_name_{{ loop.index0 }}" value="{{ item.item_name }}" required>
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control form-control-sm"
+                                        name="quantity_{{ loop.index0 }}" value="{{ item.quantity }}" min="1" required>
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control form-control-sm"
+                                        name="unit_price_{{ loop.index0 }}" value="{{ item.unit_price }}" min="0"
+                                        step="0.01" required>
+                                </td>
+                                <td>
+                                    <select class="form-control form-control-sm" name="category_{{ loop.index0 }}">
+                                        <option value="">None</option>
+                                        {% for category in categories %}
+                                        <option value="{{ category.id }}">{{ category.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="form-control form-control-sm" name="supplier_{{ loop.index0 }}">
+                                        <option value="">None</option>
+                                        {% for supplier in suppliers %}
+                                        <option value="{{ supplier.id }}">{{ supplier.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex gap-2 justify-content-end mt-4">
+                    <a href="{{ url_for('dashboard.index') }}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="bi bi-check-circle me-2"></i>Confirm & Add to Inventory
+                    </button>
+                </div>
+                {% else %}
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    No items could be extracted from the bill. Please try uploading a clearer image or add items
+                    manually.
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for('upload.index') }}" class="btn btn-primary">Try Again</a>
+                    <a href="{{ url_for('inventory.add') }}" class="btn btn-secondary">Add Manually</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+
+    <!-- OCR Text (Debug) -->
+    {% if upload_log.ocr_text %}
+    <div class="card mt-4">
+        <div class="card-header">
+            <h6 class="card-title mb-0">
+                <a data-bs-toggle="collapse" href="#ocrText" class="text-decoration-none">
+                    <i class="bi bi-chevron-down me-2"></i>View OCR Extracted Text (Debug)
+                </a>
+            </h6>
+        </div>
+        <div id="ocrText" class="collapse">
+            <div class="card-body">
+                <pre class="bg-light p-3 rounded"
+                    style="max-height: 300px; overflow-y: auto;">{{ upload_log.ocr_text }}</pre>
+                <p class="text-muted mb-0">Confidence: {{ upload_log.ocr_confidence }}%</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    // Select all checkbox functionality
+    document.getElementById('selectAllCheckbox').addEventListener('change', function () {
+        document.querySelectorAll('.item-checkbox').forEach(cb => {
+            cb.checked = this.checked;
+        });
+    });
+</script>
+{% endblock %}

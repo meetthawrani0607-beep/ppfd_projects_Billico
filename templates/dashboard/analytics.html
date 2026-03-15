@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics - Billico{% endblock %}
+
+{% block page_title %}Analytics & Insights{% endblock %}
+
+{% block content %}
+<div class="analytics-page">
+    <div class="row g-4">
+        <!-- Stock Trend Chart -->
+        <div class="col-12 col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Stock Level Trends</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="stockTrendChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stock Health Pie Chart -->
+        <div class="col-12 col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Stock Health</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="stockHealthChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Distribution -->
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Category Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="categoryChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+{% endblock %}

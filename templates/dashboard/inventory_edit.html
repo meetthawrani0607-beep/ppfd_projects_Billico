@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Edit {{ item.item_name }} - Billico{% endblock %}
+
+{% block page_title %}Edit Inventory Item{% endblock %}
+
+{% block content %}
+<div class="edit-item-page">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-pencil me-2"></i>Edit Item: {{ item.item_name }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% include 'components/alerts.html' %}
+
+                    <form method="POST" action="{{ url_for('inventory.edit', item_id=item.id) }}">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="item_name" class="form-label">Item Name *</label>
+                                <input type="text" class="form-control" id="item_name" name="item_name"
+                                    value="{{ item.item_name }}" required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="sku" class="form-label">SKU</label>
+                                <input type="text" class="form-control" id="sku" name="sku"
+                                    value="{{ item.sku or '' }}">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description"
+                                rows="3">{{ item.description or '' }}</textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="quantity" class="form-label">Quantity *</label>
+                                <input type="number" class="form-control" id="quantity" name="quantity"
+                                    value="{{ item.quantity }}" min="0" required>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="unit_price" class="form-label">Unit Price *</label>
+                                <input type="number" class="form-control" id="unit_price" name="unit_price"
+                                    value="{{ item.unit_price }}" step="0.01" min="0" required>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="reorder_level" class="form-label">Reorder Level</label>
+                                <input type="number" class="form-control" id="reorder_level" name="reorder_level"
+                                    value="{{ item.reorder_level }}" min="0">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="category_id" class="form-label">Category</label>
+                                <select class="form-control" id="category_id" name="category_id">
+                                    <option value="">Select Category</option>
+                                    {% for category in categories %}
+                                    <option value="{{ category.id }}" {% if item.category_id==category.id %}selected{%
+                                        endif %}>
+                                        {{ category.name }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="supplier_id" class="form-label">Supplier</label>
+                                <select class="form-control" id="supplier_id" name="supplier_id">
+                                    <option value="">Select Supplier</option>
+                                    {% for supplier in suppliers %}
+                                    <option value="{{ supplier.id }}" {% if item.supplier_id==supplier.id %}selected{%
+                                        endif %}>
+                                        {{ supplier.name }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Location</label>
+                            <input type="text" class="form-control" id="location" name="location"
+                                value="{{ item.location or '' }}" placeholder="e.g. Warehouse A, Shelf 5">
+                        </div>
+
+                        <!-- Item Info -->
+                        <div class="alert alert-info">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <small class="d-block">
+                                        <i class="bi bi-clock-history me-1"></i>
+                                        <strong>Created:</strong> {{ item.created_at.strftime('%b %d, %Y') }}
+                                    </small>
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="d-block">
+                                        <i class="bi bi-arrow-repeat me-1"></i>
+                                        <strong>Last Updated:</strong> {{ item.updated_at.strftime('%b %d, %Y at %I:%M
+                                        %p') }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{{ url_for('inventory.index') }}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-2"></i>Update Item
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Billico{% endblock %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+    <!-- Stats Cards Row -->
+    <div class="row g-4 mb-4">
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="stats-card">
+                <div class="stats-icon primary">
+                    <i class="bi bi-box-seam"></i>
+                </div>
+                <div class="stats-value">{{ total_items }}</div>
+                <div class="stats-label">Total Items</div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="stats-card">
+                <div class="stats-icon success">
+                    <i class="bi bi-stack"></i>
+                </div>
+                <div class="stats-value">{{ total_quantity }}</div>
+                <div class="stats-label">Total Quantity</div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="stats-card">
+                <div class="stats-icon warning">
+                    <i class="bi bi-exclamation-triangle"></i>
+                </div>
+                <div class="stats-value">{{ low_stock_count }}</div>
+                <div class="stats-label">Low Stock Items</div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="stats-card">
+                <div class="stats-icon primary">
+                    <i class="bi bi-currency-dollar"></i>
+                </div>
+                <div class="stats-value">{{ total_value|currency }}</div>
+                <div class="stats-label">Total Value</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Recent Items -->
+        <div class="col-12 col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Recently Updated Items</h5>
+                    <a href="{{ url_for('inventory.index') }}" class="btn btn-sm btn-primary">View All</a>
+                </div>
+                <div class="card-body p-0">
+                    {% if recent_items %}
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Item Name</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th>Updated</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in recent_items %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ item.item_name }}</strong>
+                                        {% if item.sku %}<br><small class="text-muted">SKU: {{ item.sku }}</small>{%
+                                        endif %}
+                                    </td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>{{ item.unit_price|currency }}</td>
+                                    <td><span class="badge badge-{{ item.get_status_badge_class() }}">{{
+                                            item.stock_status|replace('_', ' ')|title }}</span></td>
+                                    <td><small class="text-muted">{{ item.updated_at|timeago }}</small></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-inbox display-4 text-muted"></i>
+                        <p class="text-muted mt-3">No items yet. Start by uploading a bill or adding items manually.</p>
+                        <a href="{{ url_for('upload.index') }}" class="btn btn-primary">Upload Bill</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Low Stock Alerts -->
+        <div class="col-12 col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Low Stock Alerts</h5>
+                </div>
+                <div class="card-body">
+                    {% if low_stock_items %}
+                    <div class="list-group">
+                        {% for item in low_stock_items %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6 class="mb-1">{{ item.item_name }}</h6>
+                                    <small class="text-muted">Qty: {{ item.quantity }}</small>
+                                </div>
+                                <span class="badge badge-{{ item.get_status_badge_class() }}">{{ item.stock_status|title
+                                    }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="bi bi-check-circle display-4 text-success"></i>
+                        <p class="text-muted mt-2 mb-0">All items are well stocked!</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Uploads -->
+    {% if recent_uploads %}
+    <div class="row g-4 mt-2">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Recent Uploads</h5>
+                    <a href="{{ url_for('upload.history') }}" class="btn btn-sm btn-outline">View All</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>File Name</th>
+                                    <th>Date</th>
+                                    <th>Items Extracted</th>
+                                    <th>Items Added</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for upload in recent_uploads %}
+                                <tr>
+                                    <td>{{ upload.original_filename }}</td>
+                                    <td>{{ upload.upload_time|datetime }}</td>
+                                    <td>{{ upload.items_extracted }}</td>
+                                    <td>{{ upload.items_added }}</td>
+                                    <td><span class="badge badge-{{ upload.get_status_badge_class() }}">{{
+                                            upload.ocr_status|title }}</span></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

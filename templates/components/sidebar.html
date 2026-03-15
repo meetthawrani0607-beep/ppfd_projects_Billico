@@ -1,0 +1,61 @@
+<!-- Sidebar Navigation -->
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <a href="{{ url_for('dashboard.index') }}" class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+                <i class="bi bi-box-seam"></i>
+            </div>
+            <span>Billico</span>
+        </a>
+    </div>
+
+    <nav class="sidebar-nav">
+        <div class="nav-section-title">Main</div>
+
+        <a href="{{ url_for('dashboard.index') }}"
+            class="nav-link {% if request.endpoint == 'dashboard.index' %}active{% endif %}">
+            <div class="nav-icon"><i class="bi bi-speedometer2"></i></div>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="{{ url_for('inventory.index') }}"
+            class="nav-link {% if request.endpoint and 'inventory' in request.endpoint %}active{% endif %}">
+            <div class="nav-icon"><i class="bi bi-box"></i></div>
+            <span>Inventory</span>
+        </a>
+
+        <a href="{{ url_for('upload.index') }}"
+            class="nav-link {% if request.endpoint and 'upload' in request.endpoint %}active{% endif %}">
+            <div class="nav-icon"><i class="bi bi-cloud-upload"></i></div>
+            <span>Upload Bill</span>
+        </a>
+
+        <a href="{{ url_for('dashboard.analytics') }}"
+            class="nav-link {% if request.endpoint == 'dashboard.analytics' %}active{% endif %}">
+            <div class="nav-icon"><i class="bi bi-graph-up"></i></div>
+            <span>Analytics</span>
+        </a>
+
+        <div class="nav-section-title mt-4">Account</div>
+
+        <a href="{{ url_for('dashboard.profile') }}"
+            class="nav-link {% if request.endpoint == 'dashboard.profile' %}active{% endif %}">
+            <div class="nav-icon"><i class="bi bi-person"></i></div>
+            <span>Profile</span>
+        </a>
+
+        <a href="{{ url_for('dashboard.settings') }}"
+            class="nav-link {% if request.endpoint == 'dashboard.settings' %}active{% endif %}">
+            <div class="nav-icon"><i class="bi bi-gear"></i></div>
+            <span>Settings</span>
+        </a>
+
+        <a href="{{ url_for('auth.logout') }}" class="nav-link">
+            <div class="nav-icon"><i class="bi bi-box-arrow-right"></i></div>
+            <span>Logout</span>
+        </a>
+    </nav>
+</aside>
+
+<!-- Mobile Sidebar Overlay -->
+<div class="sidebar-overlay"></div>

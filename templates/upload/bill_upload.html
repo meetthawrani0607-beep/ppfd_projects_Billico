@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Bill - Billico{% endblock %}
+
+{% block page_title %}Upload Bill/Receipt{% endblock %}
+
+{% block content %}
+<div class="upload-page">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Upload Bill or Receipt</h5>
+                    <p class="text-muted mb-0">Upload an image of your bill/receipt. Our AI will automatically extract
+                        inventory data.</p>
+                </div>
+                <div class="card-body">
+                    <!-- DEMO MODE NOTICE -->
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Demo Mode:</strong> OCR bill processing is not available in this demo version.
+                        Please use the <a href="{{ url_for('inventory.add') }}" class="alert-link">Add Item</a> feature
+                        to manually enter inventory items.
+                    </div>
+
+                    <form id="uploadForm" onsubmit="event.preventDefault(); showDemoMessage();">
+                        <div class="upload-area text-center p-5 mb-4"
+                            style="border: 2px dashed var(--gray-lighter); border-radius: var(--radius-lg);">
+                            <i class="bi bi-cloud-upload display-1 text-muted mb-3"></i>
+                            <h4 class="text-muted">OCR Upload (Demo Mode)</h4>
+                            <p class="text-muted">Bill processing is disabled in demo mode</p>
+                            <input type="file" class="form-control d-none" id="billFile" name="bill_file"
+                                accept=".jpg,.jpeg,.png,.pdf" disabled>
+                            <button type="button" class="btn btn-secondary" disabled>
+                                <i class="bi bi-file-earmark-arrow-up me-2"></i>Upload Disabled
+                            </button>
+                        </div>
+
+                        <!-- Preview Container -->
+                        <div id="previewContainer" style="display: none;" class="mb-4">
+                            <h6>Preview:</h6>
+                            <img id="imagePreview" src="" alt="Preview" class="img-fluid rounded"
+                                style="max-height: 400px;">
+                            <p class="text-muted mt-2" id="fileName"></p>
+                        </div>
+
+                        <div class="d-grid">
+                            <a href="{{ url_for('inventory.add') }}" class="btn btn-primary btn-lg">
+                                <i class="bi bi-plus-circle me-2"></i>Add Item Manually Instead
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- How it Works -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="card-title">How It Works</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-12 col-md-4 text-center">
+                            <div class="display-4 text-primary mb-3"><i class="bi bi-1-circle"></i></div>
+                            <h6>Upload Bill</h6>
+                            <p class="text-muted small">Upload a clear image or PDF of your bill/receipt</p>
+                        </div>
+                        <div class="col-12 col-md-4 text-center">
+                            <div class="display-4 text-primary mb-3"><i class="bi bi-2-circle"></i></div>
+                            <h6>AI Processing</h6>
+                            <p class="text-muted small">Our AI extracts item names, quantities, and prices</p>
+                        </div>
+                        <div class="col-12 col-md-4 text-center">
+                            <div class="display-4 text-primary mb-3"><i class="bi bi-3-circle"></i></div>
+                            <h6>Review & Add</h6>
+                            <p class="text-muted small">Review extracted data and add to your inventory</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+{% endblock %}

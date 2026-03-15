@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - Billico{% endblock %}
+
+{% block page_title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="profile-page">
+    <div class="row g-4">
+        <!-- Profile Card -->
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <div class="profile-avatar mb-3">
+                        <div class="avatar-circle mx-auto"
+                            style="width: 120px; height: 120px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <span class="text-white" style="font-size: 48px; font-weight: 600;">
+                                {{ user.username[0].upper() }}
+                            </span>
+                        </div>
+                    </div>
+                    <h4 class="mb-1">{{ user.full_name or user.username }}</h4>
+                    <p class="text-muted mb-3">@{{ user.username }}</p>
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('dashboard.edit_profile') }}" class="btn btn-primary">
+                            <i class="bi bi-pencil me-2"></i>Edit Profile
+                        </a>
+                        <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger">
+                            <i class="bi bi-box-arrow-right me-2"></i>Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Card -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">Quick Stats</h6>
+                </div>
+                <div class="card-body">
+                    <div class="stat-item mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted">
+                                <i class="bi bi-box me-2"></i>Total Items
+                            </span>
+                            <strong>{{ user.inventory_items.count() }}</strong>
+                        </div>
+                    </div>
+                    <div class="stat-item mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted">
+                                <i class="bi bi-calendar me-2"></i>Member Since
+                            </span>
+                            <strong>{{ user.created_at.strftime('%b %Y') }}</strong>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted">
+                                <i class="bi bi-clock-history me-2"></i>Last Login
+                            </span>
+                            <strong>{{ user.last_login.strftime('%d %b, %Y') if user.last_login else 'N/A' }}</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Details -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Profile Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-sm-4">
+                            <p class="text-muted mb-0">Username</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="mb-0"><strong>{{ user.username }}</strong></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mb-4">
+                        <div class="col-sm-4">
+                            <p class="text-muted mb-0">Full Name</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="mb-0"><strong>{{ user.full_name or 'Not set' }}</strong></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mb-4">
+                        <div class="col-sm-4">
+                            <p class="text-muted mb-0">Email Address</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="mb-0"><strong>{{ user.email or 'Not set' }}</strong></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mb-4">
+                        <div class="col-sm-4">
+                            <p class="text-muted mb-0">Account Created</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="mb-0"><strong>{{ user.created_at.strftime('%B %d, %Y at %I:%M %p') }}</strong></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <p class="text-muted mb-0">Last Updated</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="mb-0"><strong>{{ user.updated_at.strftime('%B %d, %Y at %I:%M %p') if
+                                    user.updated_at else 'N/A' }}</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Card -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Recent Activity</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_items %}
+                    <div class="list-group list-group-flush">
+                        {% for item in recent_items %}
+                        <div class="list-group-item px-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">{{ item.item_name }}</h6>
+                                    <small class="text-muted">
+                                        <i class="bi bi-clock me-1"></i>
+                                        Updated {{ item.updated_at|timeago }}
+                                    </small>
+                                </div>
+                                <a href="{{ url_for('inventory.view', item_id=item.id) }}"
+                                    class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4 text-muted">
+                        <i class="bi bi-inbox display-4 mb-3"></i>
+                        <p>No recent activity</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
