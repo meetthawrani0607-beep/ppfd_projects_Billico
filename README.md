@@ -489,4 +489,4 @@ For issues, questions, or suggestions:
 
 ---
 
-**Built with ❤️ for efficient inventory management**
+**Built with ❤️ for efficient inventory management by Meet Thawrani**
